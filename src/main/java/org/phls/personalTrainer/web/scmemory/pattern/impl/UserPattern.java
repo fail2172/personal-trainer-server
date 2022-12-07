@@ -1,4 +1,4 @@
-package org.phls.personalTrainer.web.scmemory.model.pattern;
+package org.phls.personalTrainer.web.scmemory.pattern.impl;
 
 import org.ostis.scmemory.model.element.edge.EdgeType;
 import org.ostis.scmemory.model.element.link.LinkType;
@@ -8,42 +8,22 @@ import org.ostis.scmemory.websocketmemory.memory.pattern.SearchingPatternTriple;
 import org.ostis.scmemory.websocketmemory.memory.pattern.element.AliasPatternElement;
 import org.ostis.scmemory.websocketmemory.memory.pattern.element.FixedPatternElement;
 import org.ostis.scmemory.websocketmemory.memory.pattern.element.TypePatternElement;
-import org.phls.personalTrainer.web.scmemory.connection.ScConnection;
-import org.phls.personalTrainer.web.scmemory.exception.ScException;
+import org.phls.personalTrainer.web.scmemory.node.RelationNodes;
+import org.phls.personalTrainer.web.scmemory.pattern.EntityPattern;
 
 public class UserPattern implements EntityPattern {
     private static final UserPattern HOLDER_INSTANCE = new UserPattern();
-    private static final String NREL_LOGIN_IDTF = "nrel_login";
-    private static final String NREL_PASSWORD_IDTF = "nrel_password";
-    private static final String LOGIN_RELATION_PAIR_ALIAS = "_login_relation_pair_alias";
-    private static final String LOGIN_ACCESS_ARC_ALIAS = "_login_access_arc_alias";
-    private static final String LOGIN_ALIAS = "_login_alias";
-    private static final String PASSWORD_RELATION_PAIR_ALIAS = "_password_relation_pair_alias";
-    private static final String PASSWORD_ACCESS_ARC_ALIAS = "_password_access_arc_alias";
-    private static final String PASSWORD_ALIAS = "_password_alias";
+    private static final String LOGIN_RELATION_PAIR_ALIAS = "_login_relation_pair";
+    private static final String LOGIN_ACCESS_ARC_ALIAS = "_login_access_arc";
+    private static final String LOGIN_ALIAS = "_login";
+    private static final String PASSWORD_RELATION_PAIR_ALIAS = "_password_relation_pair";
+    private static final String PASSWORD_ACCESS_ARC_ALIAS = "_password_access_arc";
+    private static final String PASSWORD_ALIAS = "_password";
 
     public static final int LOGIN_INDEX = 2;
     public static final int PASSWORD_INDEX = 5;
 
-    private final ScNode nrelLogin;
-    private final ScNode nrelPassword;
-
     private UserPattern() {
-        try (ScConnection connection = new ScConnection()) {
-            var nrelLoginOptional = connection.findKeynode(NREL_LOGIN_IDTF);
-            var nrelPasswordOptional = connection.findKeynode(NREL_PASSWORD_IDTF);
-
-            if (nrelLoginOptional.isEmpty())
-                throw new ScException("nrel_login node is not valid");
-
-            if (nrelPasswordOptional.isEmpty())
-                throw new ScException("nrel_password node is not valid");
-
-            nrelLogin = nrelLoginOptional.get();
-            nrelPassword = nrelPasswordOptional.get();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public static UserPattern getInstance() {
@@ -71,12 +51,12 @@ public class UserPattern implements EntityPattern {
                 new TypePatternElement<>(LinkType.LINK_VAR, passwordAlias))
         );
         pattern.addElement(new SearchingPatternTriple(
-                new FixedPatternElement(nrelLogin),
+                new FixedPatternElement(RelationNodes.NREL_LOGIN.getNode()),
                 new TypePatternElement<>(EdgeType.ACCESS_VAR_POS_PERM, loginAccessArcAlias),
                 loginRelationPairAlias)
         );
         pattern.addElement(new SearchingPatternTriple(
-                new FixedPatternElement(nrelPassword),
+                new FixedPatternElement(RelationNodes.NREL_PASSWORD.getNode()),
                 new TypePatternElement<>(EdgeType.ACCESS_VAR_POS_PERM, passwordAccessArcAlias),
                 passwordRelationPairAlias));
         return pattern;

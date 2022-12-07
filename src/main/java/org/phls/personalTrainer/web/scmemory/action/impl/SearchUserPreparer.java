@@ -7,9 +7,9 @@ import org.phls.personalTrainer.web.scmemory.action.ActionNode;
 import org.phls.personalTrainer.web.scmemory.action.ActionNodePreparer;
 import org.phls.personalTrainer.web.scmemory.connection.ScConnection;
 import org.phls.personalTrainer.web.scmemory.exception.ScException;
+import org.phls.personalTrainer.web.scmemory.node.RelationNodes;
 import org.phls.personalTrainer.web.scmemory.util.CommonUtils;
 import org.phls.personalTrainer.web.scmemory.util.CommonUtilsImpl;
-import org.phls.personalTrainer.web.scmemory.node.Nodes;
 
 public class SearchUserPreparer implements ActionNodePreparer<String> {
     private static final SearchUserPreparer HOLDER_INSTANCE = new SearchUserPreparer();
@@ -32,7 +32,7 @@ public class SearchUserPreparer implements ActionNodePreparer<String> {
                     EdgeType.ACCESS_CONST_POS_PERM,
                     loginLink,
                     EdgeType.ACCESS_CONST_POS_PERM,
-                    Nodes.RREL_1.getNode());
+                    RelationNodes.RREL_1.getNode());
         } catch (ScMemoryException e) {
             throw new ScException("ScMemory exception", e);
         } catch (Exception e) {

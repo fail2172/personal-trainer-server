@@ -7,10 +7,10 @@ import org.phls.personalTrainer.web.scmemory.action.ActionNode;
 import org.phls.personalTrainer.web.scmemory.action.ActionNodePreparer;
 import org.phls.personalTrainer.web.scmemory.connection.ScConnection;
 import org.phls.personalTrainer.web.scmemory.exception.ScException;
-import org.phls.personalTrainer.web.scmemory.model.User;
+import org.phls.personalTrainer.web.model.impl.User;
+import org.phls.personalTrainer.web.scmemory.node.RelationNodes;
 import org.phls.personalTrainer.web.scmemory.util.CommonUtils;
 import org.phls.personalTrainer.web.scmemory.util.CommonUtilsImpl;
-import org.phls.personalTrainer.web.scmemory.node.Nodes;
 
 public class CreateUserPreparer implements ActionNodePreparer<User> {
     private static final CreateUserPreparer HOLDER_INSTANCE = new CreateUserPreparer();
@@ -34,13 +34,13 @@ public class CreateUserPreparer implements ActionNodePreparer<User> {
                     EdgeType.ACCESS_CONST_POS_PERM,
                     loginLink,
                     EdgeType.ACCESS_CONST_POS_PERM,
-                    Nodes.RREL_1.getNode());
+                    RelationNodes.RREL_1.getNode());
             utils.createTripleWithRelation(
                     actionNode.getNode(),
                     EdgeType.ACCESS_CONST_POS_PERM,
                     password,
                     EdgeType.ACCESS_CONST_POS_PERM,
-                    Nodes.RREL_2.getNode());
+                    RelationNodes.RREL_2.getNode());
         } catch (ScMemoryException e) {
             throw new ScException("ScMemory exception", e);
         } catch (Exception e) {

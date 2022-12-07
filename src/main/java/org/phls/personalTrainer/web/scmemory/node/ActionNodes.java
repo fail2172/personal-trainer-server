@@ -4,15 +4,14 @@ import org.ostis.scmemory.model.element.node.ScNode;
 import org.phls.personalTrainer.web.scmemory.util.CommonUtils;
 import org.phls.personalTrainer.web.scmemory.util.CommonUtilsImpl;
 
-public enum Nodes {
-    QUESTION_FINISHED_UNSUCCESSFULLY("question_finished_unsuccessfully"),
-    QUESTION_FINISHED_SUCCESSFULLY("question_finished_successfully"),
-    QUESTION_INITIATED("question_initiated"),
-    CONCEPT_USER("concept_user");
+public enum ActionNodes {
+    ACTION_CREATE_USER("action_create_user"),
+    ACTION_SEARCH_USER("action_search_user"),
+    ACTION_UPDATE_USER("action_update_user");
 
     private final ScNode node;
 
-    Nodes(String systemIdtf) {
+    ActionNodes(String systemIdtf) {
         try {
             CommonUtils utils = CommonUtilsImpl.getInstance();
             node = utils.receiveNode(systemIdtf);

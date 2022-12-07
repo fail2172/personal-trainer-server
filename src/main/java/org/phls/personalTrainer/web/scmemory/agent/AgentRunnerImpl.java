@@ -4,16 +4,20 @@ import org.ostis.scmemory.model.element.edge.EdgeType;
 import org.ostis.scmemory.model.element.node.NodeType;
 import org.ostis.scmemory.model.element.node.ScNode;
 import org.ostis.scmemory.model.exception.ScMemoryException;
-import org.ostis.scmemory.model.pattern.factory.DefaultScPattern5Factory;
 import org.phls.personalTrainer.web.scmemory.action.ActionNode;
 import org.phls.personalTrainer.web.scmemory.connection.ScConnection;
 import org.phls.personalTrainer.web.scmemory.exception.ScException;
 import org.phls.personalTrainer.web.scmemory.exception.TimeoutExceededException;
 import org.phls.personalTrainer.web.scmemory.exception.UnsuccessfulDecisionException;
 import org.phls.personalTrainer.web.scmemory.node.Nodes;
+import org.phls.personalTrainer.web.scmemory.util.CommonUtils;
+import org.phls.personalTrainer.web.scmemory.util.CommonUtilsImpl;
+
+import java.util.Optional;
 
 public class AgentRunnerImpl implements AgentRunner {
     private static final AgentRunnerImpl HOLDER_INSTANCE = new AgentRunnerImpl();
+    private static final CommonUtils utils = CommonUtilsImpl.getInstance();
     private static final int PROCESSING_TIME = 5000;
 
     private AgentRunnerImpl() {
@@ -31,16 +35,10 @@ public class AgentRunnerImpl implements AgentRunner {
                     Nodes.QUESTION_INITIATED.getNode(),
                     actionNode.getNode());
             if (checkDecision(actionNode)) {
-                var pattern = DefaultScPattern5Factory.get(
-                        actionNode.getNode(),
-                        EdgeType.D_COMMON_VAR,
-                        NodeType.VAR_STRUCT,
-                        EdgeType.ACCESS_VAR_POS_PERM,
-                        Nodes.NREL_ANSWER.getNode()
-                );
-                var result = connection.find(pattern).findFirst();
-                if (result.isPresent())
-                    return result.get().get3();
+                Optional<ScNode> resultContour =
+                        utils.receiveTripleTarget(actionNode.getNode(), EdgeType.D_COMMON_CONST, NodeType.CONST_STRUCT);
+                if (resultContour.isPresent())
+                    return resultContour.get();
                 else
                     throw new ScException("Agent result not found");
             } else
