@@ -3,7 +3,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
-    <title>Пользователь</title>
+    <title>Пользовател</title>
 </head>
 <body>
 
