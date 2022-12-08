@@ -6,7 +6,7 @@ import org.phls.personalTrainer.web.scmemory.exception.ScException;
 import java.util.List;
 import java.util.Optional;
 
-public interface ScEntityDao <T extends ScEntity>{
+public interface ScEntityDao <T extends ScEntity> {
 
     void create(T entity) throws ScException;
 
