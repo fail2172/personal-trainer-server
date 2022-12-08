@@ -1,20 +1,41 @@
-plugins {
-    id 'java'
+buildscript {
+
 }
 
+plugins {
+    id 'java'
+    id 'war'
+    id 'com.github.sahara3.tomcat-runner' version '0.2.1'
+}
+
+compileJava.options.encoding = 'UTF-8'
 group 'org.phls.personalTrainer.web'
-version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
 }
 
 dependencies {
     implementation 'io.github.artrayme:jmantic:0.6.3'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation group: 'javax.servlet.jsp.jstl', name: 'jstl-api', version: '1.2'
+    compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+    runtimeOnly group: 'org.glassfish.web', name: 'jstl-impl', version: '1.2'
+
 }
 
-test {
-    useJUnitPlatform()
+tomcat {
+    version = 9.0
+    port = serverPort as int
+
+    webapp("build/libs/${projectDir.name}.war") {
+        contextPath = webAppContextPath
+    }
+}
+
+tasks.register('startServer') {
+    group = 'execution'
+    description = "Start tomcat embedded server"
+    dependsOn(war)
+    finalizedBy tomcatRun
 }
