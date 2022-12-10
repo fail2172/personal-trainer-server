@@ -20,5 +20,11 @@ public interface CommonUtils {
 
     Optional<ScNode> receiveTripleTarget(ScNode begin, EdgeType edgeType, NodeType targetType) throws ScException;
 
+    Optional<ScNode> receiveTripleWithRelationTarget(ScNode source, EdgeType relationPairEdgeType, NodeType targetType,
+                                                     EdgeType accessArcType, ScNode relation) throws ScException;
+
+    Optional<ScNode> receiveTripleWithRelationSource(NodeType sourceType, EdgeType relationPairEdgeType, ScNode target,
+                                                     EdgeType accessArcType, ScNode relation) throws ScException;
+
     List<? extends ScElement> receiveAllFromSet(ScNode set, NodeType elementsType) throws ScException;
 }
