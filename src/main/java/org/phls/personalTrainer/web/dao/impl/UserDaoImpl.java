@@ -12,7 +12,7 @@ import org.phls.personalTrainer.web.scmemory.agent.AgentRunner;
 import org.phls.personalTrainer.web.scmemory.agent.AgentRunnerImpl;
 import org.phls.personalTrainer.web.scmemory.exception.ScException;
 import org.phls.personalTrainer.web.scmemory.extractor.EntityFromContourExtractor;
-import org.phls.personalTrainer.web.scmemory.extractor.UserFromContourExtractor;
+import org.phls.personalTrainer.web.scmemory.extractor.impl.UserFromContourExtractor;
 import org.phls.personalTrainer.web.scmemory.node.ActionNodes;
 
 import java.util.List;

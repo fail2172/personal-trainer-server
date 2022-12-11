@@ -9,8 +9,12 @@ public enum RelationNodes {
     NREL_USER_PARAMS("nrel_user_params"),
     NREL_PASSWORD("nrel_password"),
     NREL_LOGIN("nrel_login"),
+    NREL_BREAKFAST("nrel_breakfast"),
+    NREL_LUNCH("nrel_lunch"),
+    NREL_DINNER("nrel_dinner"),
     RREL_1("rrel_1"),
-    RREL_2("rrel_2");
+    RREL_2("rrel_2"),
+    RREL_3("rrel_3");
 
     private final ScNode node;
 
