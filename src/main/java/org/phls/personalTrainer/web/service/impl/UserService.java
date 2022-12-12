@@ -1,6 +1,7 @@
 package org.phls.personalTrainer.web.service.impl;
 
 import org.phls.personalTrainer.web.dao.ScEntityDao;
+import org.phls.personalTrainer.web.dao.impl.UserDao;
 import org.phls.personalTrainer.web.model.impl.User;
 import org.phls.personalTrainer.web.scmemory.exception.ScException;
 import org.phls.personalTrainer.web.service.ScEntityService;
@@ -15,17 +16,13 @@ public class UserService implements ScEntityService<User> {
 
     private static UserService instance;
 
-    private final ScEntityDao<User> userDao;
+    private final ScEntityDao<User> userDao = UserDao.getInstance();
 
     private final Logger logger = Logger.getLogger(UserService.class.getName());
 
-    public UserService(ScEntityDao<User> userDao) {
-        this.userDao = userDao;
-    }
-
-    public static synchronized UserService getInstance(ScEntityDao<User> userDao) {
+    public static synchronized UserService getInstance() {
         if (instance == null) {
-            instance = new UserService(userDao);
+            instance = new UserService();
         }
         return instance;
     }
