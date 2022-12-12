@@ -5,6 +5,7 @@ import org.ostis.scmemory.model.element.node.NodeType;
 import org.ostis.scmemory.model.element.node.ScNode;
 import org.phls.personalTrainer.web.model.impl.Diet;
 import org.phls.personalTrainer.web.scmemory.exception.ScException;
+import org.phls.personalTrainer.web.scmemory.extractor.IdExtractor;
 import org.phls.personalTrainer.web.scmemory.extractor.ScEntityExtractor;
 import org.phls.personalTrainer.web.scmemory.node.Products;
 import org.phls.personalTrainer.web.scmemory.node.RelationNodes;
@@ -16,6 +17,7 @@ import java.util.List;
 public class DietExtractor implements ScEntityExtractor<Diet> {
     private static final DietExtractor HOLDER_INSTANCE = new DietExtractor();
     private static final CommonUtils utils = CommonUtilsImpl.getInstance();
+    private static final IdExtractor idExtractor = IdExtractorImpl.getInstance();
 
     private DietExtractor() {
     }
@@ -65,6 +67,9 @@ public class DietExtractor implements ScEntityExtractor<Diet> {
                 .map(productNode -> Products.getInstance((ScNode) productNode))
                 .toList();
 
-        return new Diet(productsForBreakfast, productsForLunch, productsForDinner);
+        Diet diet = new Diet(productsForBreakfast, productsForLunch, productsForDinner);
+        diet.setId(idExtractor.extractId(entityNode));
+
+        return diet;
     }
 }

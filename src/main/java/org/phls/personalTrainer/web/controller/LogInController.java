@@ -1,6 +1,6 @@
 package org.phls.personalTrainer.web.controller;
 
-import org.phls.personalTrainer.web.dao.impl.UserDaoImpl;
+import org.phls.personalTrainer.web.dao.impl.UserDao;
 import org.phls.personalTrainer.web.model.impl.User;
 import org.phls.personalTrainer.web.service.ScEntityService;
 import org.phls.personalTrainer.web.service.impl.UserService;
@@ -19,7 +19,7 @@ public class LogInController extends HttpServlet {
     public static final String PASSWORD = "password";
     public static final String LOGIN_PAGE = "/jsp/login.jsp";
     public static final String MAIN_PAGE = "/jsp/main.jsp";
-    ScEntityService<User> userService = UserService.getInstance(UserDaoImpl.getInstance());
+    ScEntityService<User> userService = UserService.getInstance(UserDao.getInstance());
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

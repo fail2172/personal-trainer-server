@@ -8,13 +8,13 @@ import java.util.Optional;
 
 public interface ScEntityDao <T extends ScEntity> {
 
-    void create(T entity) throws ScException;
+    T create(T entity) throws ScException;
 
     Optional<T> read(String login) throws ScException;
 
     List<T> readAll() throws ScException;
 
-    void update(T entity) throws ScException;
+    T update(T entity) throws ScException;
 
     void delete(String login) throws ScException;
 

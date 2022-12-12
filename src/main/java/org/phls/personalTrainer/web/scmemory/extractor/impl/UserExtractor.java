@@ -1,6 +1,5 @@
-package org.phls.personalTrainer.web.scmemory.extractor;
+package org.phls.personalTrainer.web.scmemory.extractor.impl;
 
-import org.ostis.scmemory.model.element.ScElement;
 import org.ostis.scmemory.model.element.edge.EdgeType;
 import org.ostis.scmemory.model.element.link.ScLinkString;
 import org.ostis.scmemory.model.element.node.NodeType;
@@ -9,11 +8,9 @@ import org.ostis.scmemory.model.exception.ScMemoryException;
 import org.phls.personalTrainer.web.model.impl.User;
 import org.phls.personalTrainer.web.scmemory.connection.ScConnection;
 import org.phls.personalTrainer.web.scmemory.exception.ScException;
+import org.phls.personalTrainer.web.scmemory.extractor.ScEntityExtractor;
 import org.phls.personalTrainer.web.scmemory.node.DiseaseNodes;
-import org.phls.personalTrainer.web.scmemory.node.Nodes;
-import org.phls.personalTrainer.web.scmemory.pattern.EntityInContourPattern;
 import org.phls.personalTrainer.web.scmemory.pattern.EntityPattern;
-import org.phls.personalTrainer.web.scmemory.pattern.impl.EntityInContourPatternImpl;
 import org.phls.personalTrainer.web.scmemory.pattern.impl.UserPattern;
 import org.phls.personalTrainer.web.scmemory.util.CommonUtils;
 import org.phls.personalTrainer.web.scmemory.util.CommonUtilsImpl;
@@ -21,30 +18,22 @@ import org.phls.personalTrainer.web.scmemory.util.CommonUtilsImpl;
 import java.util.List;
 import java.util.Optional;
 
-public class UserFromContourExtractor implements EntityFromContourExtractor<User> {
-    private static final UserFromContourExtractor HOLDER_INSTANCE = new UserFromContourExtractor();
-    private static final EntityInContourPattern entityInContourPattern = EntityInContourPatternImpl.getInstance();
+public class UserExtractor implements ScEntityExtractor<User> {
+    private static final UserExtractor HOLDER_INSTANCE = new UserExtractor();
     private static final EntityPattern entityPattern = UserPattern.getInstance();
     private static final CommonUtils utils = CommonUtilsImpl.getInstance();
 
-    private UserFromContourExtractor() {
+    private UserExtractor() {
     }
 
-    public static UserFromContourExtractor getInstance() {
+    public static UserExtractor getInstance() {
         return HOLDER_INSTANCE;
     }
 
     @Override
-    public User extractScEntity(ScNode contour) throws ScException {
+    public User extractEntity(ScNode userNode) throws ScException {
         try (ScConnection connection = new ScConnection()) {
-            var userInContourPattern = entityInContourPattern.receivePattern(contour, Nodes.CONCEPT_USER.getNode());
-            var userInContour = connection.find(userInContourPattern).findFirst();
-
-            if (userInContour.isEmpty())
-                throw new ScException("User not found");
-
-            ScElement userNode = userInContour.get().toList().get(EntityInContourPatternImpl.USER_INDEX);
-            var userPattern = entityPattern.receivePattern((ScNode) userNode);
+            var userPattern = entityPattern.receivePattern(userNode);
             var userElements = connection.find(userPattern).findFirst();
 
             if (userElements.isEmpty())
@@ -60,7 +49,7 @@ public class UserFromContourExtractor implements EntityFromContourExtractor<User
 
             User user = new User(login, password);
             Optional<ScNode> diseaseSet =
-                    utils.receiveTripleTarget((ScNode) userNode, EdgeType.D_COMMON_CONST, NodeType.CONST_TUPLE);
+                    utils.receiveTripleTarget(userNode, EdgeType.D_COMMON_CONST, NodeType.CONST_TUPLE);
 
             return diseaseSet.isPresent()
                     ? user.withDiseases(receiveUserDiseases(diseaseSet.get()))

@@ -199,4 +199,19 @@ public class CommonUtilsImpl implements CommonUtils {
             throw new ScException("Memory open exception!", e);
         }
     }
+
+    @Override
+    public void addToSet(ScNode set, List<? extends ScElement> scElements) throws ScException {
+        try (ScConnection connection = new ScConnection()) {
+            for (ScElement scElement : scElements)
+                connection.createEdge(EdgeType.ACCESS_CONST_POS_PERM, set, scElement);
+
+        } catch (ScException e) {
+            throw e;
+        } catch (ScMemoryException e) {
+            throw new ScException("ScMemory exception", e);
+        } catch (Exception e) {
+            throw new ScException("Memory open exception!", e);
+        }
+    }
 }

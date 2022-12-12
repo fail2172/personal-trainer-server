@@ -16,7 +16,7 @@ public class EntityInContourPatternImpl implements EntityInContourPattern {
     private static final String CONTOUR_ACCESS_ARC_ALIAS = "_contour_access_arc";
     private static final String ENTITY_ALIAS = "_entity";
 
-    public static final int USER_INDEX = 2;
+    public static final int ENTITY_INDEX = 2;
 
     private EntityInContourPatternImpl() {
     }

@@ -27,4 +27,6 @@ public interface CommonUtils {
                                                      EdgeType accessArcType, ScNode relation) throws ScException;
 
     List<? extends ScElement> receiveAllFromSet(ScNode set, NodeType elementsType) throws ScException;
+
+    void addToSet(ScNode set, List<? extends ScElement> scElements) throws ScException;
 }
