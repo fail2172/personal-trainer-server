@@ -43,7 +43,7 @@
                 Впервые здесь?
             </button>
             <ul class="dropdown-menu">
-                <a class="dropdown-item" href="${pageContext.request.contextPath}/registerUser">Зарегистрироваться</a>
+                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/registerUser">Зарегистрироваться/</a></li>
             </ul>
         </div>
     </div>
