@@ -1,6 +1,5 @@
 package org.phls.personalTrainer.web.controller;
 
-import org.phls.personalTrainer.web.dao.impl.UserDao;
 import org.phls.personalTrainer.web.model.impl.User;
 import org.phls.personalTrainer.web.service.ScEntityService;
 import org.phls.personalTrainer.web.service.impl.UserService;
@@ -14,12 +13,13 @@ import java.io.IOException;
 
 @WebServlet("/registerUser")
 public class RegistrationController extends HttpServlet {
-    public static final String PAGE_MODE = "pageMode";
-    public static final String CREATE = "create";
-    public static final String EDIT_USER_PAGE = "/jsp/editUser.jsp";
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";
-    ScEntityService<User> userService = UserService.getInstance(UserDao.getInstance());
+    public static final String PAGE_MODE = "pageMode";
+    public static final String CREATE = "create";
+    public static final String LOG_IN = "/LogIn";
+    public static final String EDIT_USER_PAGE = "/jsp/editUser.jsp";
+    ScEntityService<User> userService = UserService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -28,10 +28,12 @@ public class RegistrationController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String login = req.getParameter(LOGIN);
         String password = req.getParameter(PASSWORD);
 
         userService.add(new User(login, password));
+
+        resp.sendRedirect(LOG_IN);
     }
 }
