@@ -4,16 +4,14 @@ import org.ostis.scmemory.model.element.node.ScNode;
 import org.phls.personalTrainer.web.scmemory.util.CommonUtils;
 import org.phls.personalTrainer.web.scmemory.util.CommonUtilsImpl;
 
-public enum Nodes {
-    QUESTION_FINISHED_UNSUCCESSFULLY("question_finished_unsuccessfully"),
-    QUESTION_FINISHED_SUCCESSFULLY("question_finished_successfully"),
-    CONCEPT_EATING_FROM_TRAINER("concept_eating_from_trainer"),
-    QUESTION_INITIATED("question_initiated"),
-    CONCEPT_USER("concept_user");
+public enum DefaultDiet {
+    CONCEPT_DRYING_EATING("concept_drying_eating"),
+    CONCEPT_HEALTHY_EATING("concept_healthy_eating"),
+    CONCEPT_MASS_EATING("concept_mass_eating");
 
     private final ScNode node;
 
-    Nodes(String systemIdtf) {
+    DefaultDiet(String systemIdtf) {
         try {
             CommonUtils utils = CommonUtilsImpl.getInstance();
             node = utils.receiveNode(systemIdtf);

@@ -11,8 +11,10 @@ import org.phls.personalTrainer.web.scmemory.connection.ScConnection;
 import org.phls.personalTrainer.web.scmemory.exception.ScException;
 import org.phls.personalTrainer.web.scmemory.pattern.SetPattern;
 import org.phls.personalTrainer.web.scmemory.pattern.TriplePattern;
+import org.phls.personalTrainer.web.scmemory.pattern.TripleWithRelationPattern;
 import org.phls.personalTrainer.web.scmemory.pattern.impl.SetPatternImpl;
 import org.phls.personalTrainer.web.scmemory.pattern.impl.TriplePatternImpl;
+import org.phls.personalTrainer.web.scmemory.pattern.impl.TripleWithRelationPatternImpl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.stream.Stream;
 public class CommonUtilsImpl implements CommonUtils {
     private static final CommonUtilsImpl HOLDER_INSTANCE = new CommonUtilsImpl();
     private static final TriplePattern triplePattern = TriplePatternImpl.getInstance();
+    private static final TripleWithRelationPattern tripleWithRelationPattern = TripleWithRelationPatternImpl.getInstance();
     private static final SetPattern setPattern = SetPatternImpl.getInstance();
     private final Map<EdgeType, EdgeType> edgesVars;
     private final Map<NodeType, NodeType> nodesVars;
@@ -138,6 +141,49 @@ public class CommonUtilsImpl implements CommonUtils {
     }
 
     @Override
+    public Optional<ScNode> receiveTripleWithRelationTarget(ScNode source, EdgeType relationPairEdgeType,
+                                                            NodeType targetType, EdgeType accessArcType,
+                                                            ScNode relation) throws ScException {
+        try (ScConnection connection = new ScConnection()) {
+            var pattern = tripleWithRelationPattern.receiveFiveWithSourcePattern(source, edgesVars.get(relationPairEdgeType),
+                    nodesVars.get(targetType), edgesVars.get(accessArcType), relation);
+            var five = connection.find(pattern).findFirst();
+
+            return five.isPresent()
+                    ? five.map(stream -> (ScNode) stream.toList().get(TripleWithRelationPatternImpl.TARGET_INDEX))
+                    : Optional.empty();
+        } catch (ScException e) {
+            throw e;
+        } catch (ScMemoryException e) {
+            throw new ScException("ScMemory exception", e);
+        } catch (Exception e) {
+            throw new ScException("Memory open exception!", e);
+        }
+    }
+
+    @Override
+    public Optional<ScNode> receiveTripleWithRelationSource(NodeType sourceType, EdgeType relationPairEdgeType,
+                                                            ScNode target, EdgeType accessArcType,
+                                                            ScNode relation) throws ScException {
+        try (ScConnection connection = new ScConnection()) {
+            var pattern = tripleWithRelationPattern.
+                    receiveFiveWithTargetPattern(nodesVars.get(sourceType), relationPairEdgeType,
+                            target, accessArcType, relation);
+            var five = connection.find(pattern).findFirst();
+
+            return five.isPresent()
+                    ? five.map(stream -> (ScNode) stream.toList().get(TripleWithRelationPatternImpl.SOURCE_INDEX))
+                    : Optional.empty();
+        } catch (ScException e) {
+            throw e;
+        } catch (ScMemoryException e) {
+            throw new ScException("ScMemory exception", e);
+        } catch (Exception e) {
+            throw new ScException("Memory open exception!", e);
+        }
+    }
+
+    @Override
     public List<? extends ScElement> receiveAllFromSet(ScNode set, NodeType elementsType) throws ScException {
         try (ScConnection connection = new ScConnection()) {
             var pattern = setPattern.receiveSetPattern(set, nodesVars.get(elementsType));
@@ -145,6 +191,21 @@ public class CommonUtilsImpl implements CommonUtils {
             return connection.find(pattern)
                     .map(triple -> triple.toList().get(SetPatternImpl.SET_ELEMENT_INDEX))
                     .toList();
+        } catch (ScException e) {
+            throw e;
+        } catch (ScMemoryException e) {
+            throw new ScException("ScMemory exception", e);
+        } catch (Exception e) {
+            throw new ScException("Memory open exception!", e);
+        }
+    }
+
+    @Override
+    public void addToSet(ScNode set, List<? extends ScElement> scElements) throws ScException {
+        try (ScConnection connection = new ScConnection()) {
+            for (ScElement scElement : scElements)
+                connection.createEdge(EdgeType.ACCESS_CONST_POS_PERM, set, scElement);
+
         } catch (ScException e) {
             throw e;
         } catch (ScMemoryException e) {
