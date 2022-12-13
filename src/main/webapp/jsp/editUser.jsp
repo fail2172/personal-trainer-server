@@ -10,14 +10,20 @@
 
     <title>Пользователь</title>
 </head>
-<body class="p-3 m-5 border-0 bd-example row-centered container mx-auto">
+<body class="border-0 bd-example row-centered container mx-auto">
+<nav class="navbar navbar-dark bg-dark">
+
+    <a class="navbar-brand container pl-2 align-center">
+        <img src="../styles/images/logoCut.png" width="200" height="80" class="d-inline-block align-left" alt="">
+        Welcome to personal coach</a>
+</nav>
 
 <c:set scope="request" var="id" value="${requestScope.user.id}"/>
 
 <c:set var="action" value="${pageContext.request.contextPath.concat(requestScope.pageMode == 'edit' ?
 '/editUser?id='.concat(param.id) : '/registerUser')}"/>
 
-<form action="${action}" method="post">
+<nav action="${action}" method="post">
     <div class="p-1 m-3 border-0 form-group row">
         <label class="col-sm-2 col-form-label p-0" for="login">Имя пользователя:</label><br>
         <div class="col-sm-3 ">
@@ -40,6 +46,7 @@
     </div>
 
     <input type="submit" class="btn btn-outline-primary col-sm-1 mx-auto text-truncate" value="Сохранить">
-</form>
+
+    </form>
 </body>
 </html>
